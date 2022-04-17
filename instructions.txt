@@ -1,0 +1,66 @@
+Virtual Environments:
+
+cd to folder
+
+#to see libs
+pip list
+
+#shows which python is being used
+which python
+
+#install virtual enviroment
+sudo apt install python3.8-venv
+
+#creates the venv
+python3 -m venv projectname_env
+
+#deletes venv completely
+rm -rf projectname_env/
+
+#'logs into' venv
+source projectname_env/bin/activate
+#'logs out of' venv
+deactivate
+
+
+requirements.text info:
+
+#creates requirements.txt
+pip freeze > requirements.txt 
+#installs from requirements.txt
+pip install -r requirements.txt 
+
+#be sure to gitignore the whole venv but keep requirements.txt
+
+
+
+Django Tutorial:
+
+cd to dir
+pip install Django
+#intitializes the project where projectname is the name of the project
+django-admin startproject projectname
+
+#run local machine server
+cd to project dir
+
+
+python manage.py runserver
+#add port number to end to run on specific port
+#python manage.py runserver 8080
+
+Create an app:
+python manage.py startapp main
+
+Editing the site:
+#views
+main/views.py
+
+touch urls.py in main/
+#urls
+main/urls.py
+
+create paths in projectname\urls.py #different than main/urls.py, this directs to main/urls where the urls were live
+    path('', include("main.urls")),
+
+
