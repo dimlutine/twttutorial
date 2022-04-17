@@ -63,4 +63,32 @@ main/urls.py
 create paths in projectname\urls.py #different than main/urls.py, this directs to main/urls where the urls were live
     path('', include("main.urls")),
 
+Databases:
+modify settings.py from projectname/settings.py
+    add 
+        'main.apps.MainConfig',
+    to INSTALLED_APPS
 
+cd to projectname directory
+python manage.py migrate
+
+#models
+projectname/models.py
+
+#After we modify our models we need to tell django that we've done so
+be in same dir
+
+python manage.py makemigrations main
+python manage.py migrate
+# can be checked in migrations/0001_initial.py
+
+add stuff to db:
+from main.models import Item, ToDoList
+t = ToDoList(name="dim\'s list")
+t.save()
+ToDoList.objects.all() #to see all objects
+ToDoList.objects.get(id=1) #to see object at id 1
+ToDoList.objects.get(name="dim's list") #same as above by by name instead of id
+
+t.item_set.all() #provides empty QuerySet
+t.item_set.create(text="Go to the mall", complete=False) #create item that says 'Go to the mall'

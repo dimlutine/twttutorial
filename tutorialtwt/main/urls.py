@@ -5,7 +5,8 @@ from . import views
 
 #if we don't specify a page, we're going to go to index
 urlpatterns = [
-    path("", views.index, name="index"),
-    path("v1/", views.v1, name="v1"),
-    path("tob/", views.tob, name="tob"),
+    # path("", views.index, name="index"),
+    path("<str:name>", views.index, name="index"),
+    # path("v1/", views.v1, name="v1"),
+    # path("tob/", views.tob, name="tob"),
 ]
