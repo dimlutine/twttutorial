@@ -92,3 +92,20 @@ ToDoList.objects.get(name="dim's list") #same as above by by name instead of id
 
 t.item_set.all() #provides empty QuerySet
 t.item_set.create(text="Go to the mall", complete=False) #create item that says 'Go to the mall'
+
+db queries:
+t = ToDoList.objects
+t.filter(name__startswith="dim") #returns QuerySet starting with 'dim'
+t.filter(id=1) #returns QuerySet with id of 1
+del_object = t.get(id=1)
+del_object.delete() #deletes object with id of 1
+
+admin dashboard:
+python manage.py createsuperuser
+
+give dashboard access to db:
+#import models to projectname/admin.py
+from .models import ToDoList, Item
+
+admin.site.register(ToDoList)
+admin.site.register(Item)
