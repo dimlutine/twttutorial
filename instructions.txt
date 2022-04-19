@@ -167,3 +167,62 @@ If Statements:
     {% else %}
         <li>{{item.text}} - COMPLETE</li>
     {% endif %}
+
+Forms:
+#set up path to new page in urls.py
+path("create/", views.create, name="create"),
+
+#create function in views.py
+    def create(response):
+    return render(response, "main/create.html", {})
+
+#create create.html just like any other page
+
+#add the html for forms, but use {{form}}
+    <form action="/create/" method="post">
+    {{form}}
+    <button type="submit", name=""save">Create New</button>
+
+    </form>
+#default form layout
+{{form.as_table}}
+{{form.as_p}}
+{{form.as_ul}}
+
+#touch forms.py inside main
+#create Class for forms inside forms.py
+    class CreateNewList(forms.Form):
+        name = forms.CharField(label="Name", max_length=200)
+        check = forms.BooleanField()
+
+#import Class from .forms into views.py and add forms var for create func
+    def create(response):
+        form = CreateNewList
+        return render(response, "main/create.html", {"form":form})
+
+#make the thing optional
+    check = forms.BooleanField(required=False)
+
+#csrf error - whenever we create forms we want to include the following above {{forms}}
+    {% csrf_token %}
+
+POST vs GET:
+    You can do anything with GET that you can do with POST
+    POST encrpyts
+    Use GET to retrieve info that doesn't need security
+    GET puts the plain text in the URL
+        good for bookmarking I guess?
+
+    POST and GET are passed through the 'response' variable to view
+        if response.method == "POST":
+            form = CreateNewList(response.POST) #holds all of the info from the form in a dictionary
+            if form.is_valid():
+                n = form.cleaned_data["name"]
+                t = ToDoList(name=n)
+                t.save()
+        else:
+            form = CreateNewList()
+
+#Redirect from form data:
+from django.http import HttpResponse, HttpResponseRedirect
+return HttpResponseRedirect(f"/{t.id}")
