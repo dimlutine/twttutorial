@@ -224,5 +224,25 @@ POST vs GET:
             form = CreateNewList()
 
 #Redirect from form data:
-from django.http import HttpResponse, HttpResponseRedirect
-return HttpResponseRedirect(f"/{t.id}")
+    from django.http import HttpResponse, HttpResponseRedirect
+    return HttpResponseRedirect(f"/{t.id}")
+
+#Add checkbutton, name is c + id
+    <li><input type="checkbox", value="clicked",name="c{{item.id}}">{{item.text}}</li>
+
+#Saving the check buttons logic
+    if response.POST.get("save"):
+            for item in ls.item_set.all():
+                if response.POST.get("c" + str(item.id)) == "clicked":
+                    item.complete == True
+                else:
+                    item.complete == False
+
+#Saving item logic
+    elif response.POST.get("newItem"):
+            txt = response.POST.get("new")
+
+            if len(txt) > 2:
+                ls.item_set.create(text=txt, complete=False)
+            else:
+                print("invalid")
