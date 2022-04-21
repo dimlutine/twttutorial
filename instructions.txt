@@ -246,3 +246,14 @@ POST vs GET:
                 ls.item_set.create(text=txt, complete=False)
             else:
                 print("invalid")
+
+Add Sidebar:
+#in base.html set up a div in the body
+    <div class="sidenav">
+        <a href="/home">Home</a>
+        <a href="/create">Create</a>
+        <a href="/2">View</a>
+    </div>
+
+#add main class to content div
+#style as you'd like
