@@ -2,12 +2,15 @@
 {% block title %}Create New List {% endblock %}
 
 {% block content %}
-
+<h3>Create page</h3>
 <form action="/create/" method="post">
     {% csrf_token %}
-    {{form.as_ul}}
-    <button type="submit", name="save">Create New</button>
-
+    <div class="input-group mb-3 bulletless">
+        <div class="input-group-prepend">
+            <button type="submit", name="save" class="btn btn-dark">Create New</button>
+        </div>
+        {{form.name}}
+    </div>
 </form>
 
 {% endblock %}
