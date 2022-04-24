@@ -398,3 +398,65 @@ touch login.html
 
 #change redirect for logout in settings.py
     LOGOUT_REDIRECT_URL = "/"
+
+User Specific Content:
+#in models.py
+    from django.contrib.auth.models import User
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="todolist", null=True)    #now any todo list we create will be linked to some kind of user
+
+#migrate/update the db
+    python3 manage.py makemigrations
+    #if this doesn't work delete the all of the database files, everything inside migrations folder except __init__.py files.  In every migrations folder
+
+#edit main/views.py to save to-do list to specific user
+
+#add this to create under t.save()
+    response.user.todolist.add(t)
+
+#update urls.py /view route
+    path("view/", views.view, name="view"),
+
+#new function in views.py 
+    def view(response):
+        return render(response, "main/view.html", {})
+
+#create view.html
+    {% extends "main/base.html" %}
+
+    {% block title %}
+    To-Do List
+    {% endblock %}
+
+    {% block content %}
+        {% for td in user.todolist.all %}
+            <p><a href="/{{td.id}}">{{td.name}}</a></p>
+        {% endfor %}
+    {% endblock %}
+
+#in main.html change /2 to /view
+
+#make sure you can only see your own to-do lists
+#in views.py #under index
+    ls = ToDoList.objects.get(id=id)
+        if ls in response.user.todolist.all() #added
+
+            if response.method == "POST":
+                print(response.POST)
+                if response.POST.get("save"):
+                    for item in ls.item_set.all():
+                        if response.POST.get("c" + str(item.id)) == "clicked":
+                            item.complete = False
+                        else:
+                            item.complete = True
+                        item.save()
+
+                elif response.POST.get("newItem"):
+                    txt = response.POST.get("new")
+
+                    if len(txt) > 2:
+                        ls.item_set.create(text=txt, complete=False)
+                    else:
+                        print("invalid")
+
+            return render(response, "main/list.html", {"ls":ls})
+        return render(response, "main/view.html", {"ls":ls})    #added

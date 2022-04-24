@@ -10,6 +10,7 @@ urlpatterns = [
     path("", views.home, name="home"),
     path("home/", views.home, name="home"),
     path("create/", views.create, name="create"),
+    path("view/", views.view, name="view")
     
     # path("v1/", views.v1, name="v1"),
     # path("tob/", views.tob, name="tob"),

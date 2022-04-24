@@ -1,8 +1,10 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class ToDoList(models.Model):
     #whenever we create a new attribute of our model we create it as a class variable.  We name the attribute and then we do the type of field we want stored
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="todolist", null=True)    #now any todo list we create will be linked to some kind of user
     name = models.CharField(max_length=200) #CharField is a type of field that we can store information in
 
     #for if we want to print out something meaningful
