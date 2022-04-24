@@ -363,3 +363,38 @@ Gathering more info from user:
     {% load cryspy_forms_tags %}
 #change {{form}} to
     {{ form|crispy }}
+
+Login, Logout, User authentication:
+#in main/urls.py add
+    path("", include("django.contrib.auth.urls")),
+
+#create new registration folder inside templates folder
+touch login.html
+
+#create the login page and make it crispy
+    {% extends "main/base.html" %}
+
+    {% block title %}
+    Login Here
+    {% endblock %}
+    {% load crispy_forms_tags %}
+    {% block content %}
+    <form method="POST" class="form-group">
+        {% csrf_token %}
+        {{form|crispy}}
+        <p>Don't have an account?  Don't be a big dum-dum, <a href="/register">create one! </a></a></p>
+        <button type="submit" class="btn btn-dark">Login</button>
+        
+    </form>
+
+    {% endblock %}
+
+#when the user of the page logs in it redirects to account/profile
+#we can redirect this inside seetings.py
+    LOGIN_REDIRECT_URL = "/"
+
+#to only show content if logged in, use user.is_authenticated
+    {% if user.is_authenticated %}
+
+#change redirect for logout in settings.py
+    LOGOUT_REDIRECT_URL = "/"
