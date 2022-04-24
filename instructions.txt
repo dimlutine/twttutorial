@@ -113,8 +113,9 @@ from .models import ToDoList, Item
 admin.site.register(ToDoList)
 admin.site.register(Item)
 
-Adding home path to main/urls.py:
-path("", views.home, name="home")
+Adding home paths to main/urls.py:
+path("", views.home, name="home"),
+path("home/", views.home, name="home"),
 
 and in views.py
 def home(response):
@@ -279,3 +280,86 @@ Add Bootstrap:
         </div>
         {{form.name}}
     </div>
+
+#user registration (register is the name of the app we're creating for user registration)
+    python3 manage.py startapp register
+
+#add application into settings.py under INSTALLED_APPS
+    'register.apps.RegisterConfig',
+
+#add path and import to register in urls.py
+    from register import views as v
+    path("register/", v.register, name="register"),
+
+#in register\views.py create formula to render
+    def register(response):
+        return render()
+
+#create folder inside /register/templates named register
+#create register.html template inside /register/templates/register
+    {% extends "main/base.html" %}
+    {% block title %} Create an account {% endblock %}
+
+    {% block content %}
+        <form method="POST" class="form-group">
+            {% csrf_token %}
+            {{form}}
+            <button type="submit" class="btn btn-success">Register</button>
+        </form>
+    {% endblock %}
+
+#import auth methods in register/views.py.  UserCreationForm is what we use to create a new user
+    from django.contrib.auth import login, authenticate
+    from django.contrib.auth.forms import UserCreationForm
+
+#in register/view.py update the register function to use the UserCreationFrom
+    def register(response):
+        form = UserCreationForm()
+        return render(response, "register/register.html", {"form": form})
+
+#add functionaliy to the Register button in register.html by updating views.py
+    from django.shortcuts import render, redirect
+    def register(response):
+        if response.method == "POST":
+            form = UserCreationForm(response.POST)
+            if form.is_valid():
+                form.save()
+                return redirect("/home")
+        else:
+            form = UserCreationForm()
+
+Gathering more info from user:
+#add new fields to form by creating new file inside register forms.py
+    from django.contrib.auth import login, authenticate
+    from django.contrib.auth.forms import UserCreationForm
+    from django import forms
+    from django.contrib.auth.models import User
+
+#create class that inherits from UserCreationForm
+    class RegisterForm(UserCreationForm):
+        email = forms.EmailField()
+
+        class Meta:
+            model = User
+            fields = ["username", "email", "password1", "password2"]
+
+#update views.py to use the new class
+#delete these
+    from django.contrib.auth import login, authenticate
+    from django.contrib.auth.forms import UserCreationForm
+#add this
+    from forms import RegisterForm
+#replace all instances of UserCreationForm with RegisterForm
+
+#install crispy forms to make the forms not look terrible
+    pip install django-crispy-forms
+#add it to settings.py
+    'crispy_forms', #<- in INSTALLED_APPS
+
+#at bottom of settings.py add this tempalte
+    CRISPY_TEMPLATE_PACK="bootstrap4"
+
+#to actually use crispy forms add this to register.html
+    {% load cryspy_forms_tags %}
+#change {{form}} to
+    {{ form|crispy }}
